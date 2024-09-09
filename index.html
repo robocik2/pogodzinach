@@ -15,7 +15,7 @@
             overflow: hidden;
             cursor: none;
             user-select: none; /* Disable text selection */
-            background-color: #f0f0f0; /* Default background color */
+            background-color: #d0d0d0; /* Default background color */
         }
         #logo, #cursor {
             pointer-events: none; /* Disable clicking */
@@ -38,7 +38,7 @@
         .button {
             position: fixed;
             margin: 20px;
-            font-size: 20px;
+            font-size: 28px; /* Increased font size */
             cursor: pointer;
             color: black;
         }
@@ -65,14 +65,16 @@
     <div id="insta" class="button" onclick="window.location.href='https://www.instagram.com/po_godzinach_zin/'">INSTA</div>
 
     <script>
-        // Function to generate a pastel color (for background)
-        function getRandomPastelColor() {
-            const hue = Math.floor(Math.random() * 360);
-            return `hsl(${hue}, 100%, 87%)`;
+        // Function to generate slightly darker pastel color
+        function getRandomDarkerPastelColor() {
+            const hue = Math.floor(Math.random() * 360); // Random hue
+            const saturation = 60; // Keep it lower to make it look darker but not too dark
+            const lightness = 60; // Slightly darker than a typical pastel
+            return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
         }
 
-        // Set a random pastel color as the background
-        document.body.style.backgroundColor = getRandomPastelColor();
+        // Set a random darker pastel color as the background
+        document.body.style.backgroundColor = getRandomDarkerPastelColor();
 
         const cursor = document.getElementById('cursor');
         const canvas = document.getElementById('drawCanvas');
