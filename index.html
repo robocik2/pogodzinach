@@ -89,7 +89,7 @@
 
         resizeCanvas(); // Initial setup
 
-        // Mouse drawing event
+        // Desktop Drawing System (mouse moves continuously draw)
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
@@ -107,25 +107,30 @@
             ctx.moveTo(e.clientX, e.clientY);
         });
 
-        // Touch events for mobile drawing
-        canvas.addEventListener('touchmove', (e) => {
+        // Mobile Drawing System (tap and swipe to draw)
+        let isDrawing = false;
+
+        canvas.addEventListener('touchstart', (e) => {
+            isDrawing = true;
             const touch = e.touches[0]; // Get the first touch
-            const touchX = touch.clientX;
-            const touchY = touch.clientY;
+            ctx.beginPath();
+            ctx.moveTo(touch.clientX, touch.clientY);
+        });
 
-            ctx.lineTo(touchX, touchY);
-            ctx.strokeStyle = 'black'; // Brush color
-            ctx.lineWidth = 8; // Brush size
-            ctx.lineCap = 'round';
-            ctx.stroke();
-
+        canvas.addEventListener('touchmove', (e) => {
+            if (isDrawing) {
+                const touch = e.touches[0]; // Get the first touch
+                ctx.lineTo(touch.clientX, touch.clientY);
+                ctx.strokeStyle = 'black'; // Brush color
+                ctx.lineWidth = 8; // Brush size
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            }
             e.preventDefault(); // Prevent scrolling
         });
 
-        canvas.addEventListener('touchstart', (e) => {
-            const touch = e.touches[0];
-            ctx.beginPath();
-            ctx.moveTo(touch.clientX, touch.clientY);
+        canvas.addEventListener('touchend', () => {
+            isDrawing = false; // Stop drawing when touch ends
         });
 
         // Prevent touch scrolling during drawing
