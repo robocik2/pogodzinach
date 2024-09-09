@@ -17,24 +17,36 @@
             user-select: none; /* Disable text selection */
             background-color: #d0d0d0; /* Default background color */
         }
+
+        /* Hide the cursor for touch devices */
+        @media (pointer: coarse) {
+            #cursor {
+                display: none; /* Hide custom cursor on mobile */
+            }
+        }
+
         #logo, #cursor {
             pointer-events: none; /* Disable clicking */
         }
+
         #logo {
             max-width: 80%;
             max-height: 80%;
         }
+
         #cursor {
             position: fixed;
             pointer-events: none;
             z-index: 9999;
         }
+
         canvas {
             position: fixed;
             top: 0;
             left: 0;
             z-index: -1;
         }
+
         .button {
             position: fixed;
             margin: 20px;
@@ -43,14 +55,17 @@
             cursor: pointer;
             color: black;
         }
+
         #info {
             top: 0;
             left: 0;
         }
+
         #insta {
             top: 0;
             right: 0;
         }
+
         .button:hover {
             text-decoration: underline;
         }
@@ -90,26 +105,32 @@
         resizeCanvas(); // Initial setup
 
         // Desktop Drawing System (mouse moves continuously draw)
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
+        let isDrawing = false;
 
-            ctx.lineTo(e.clientX, e.clientY);
-            ctx.strokeStyle = 'black'; // Brush color is always black
-            ctx.lineWidth = 8; // Brush size
-            ctx.lineCap = 'round';
-            ctx.stroke();
-        });
-
-        // Start a new path every time mouse is moved
-        document.addEventListener('mousemove', (e) => {
-            ctx.beginPath(); // Start a new path
+        document.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            ctx.beginPath();
             ctx.moveTo(e.clientX, e.clientY);
         });
 
-        // Mobile Drawing System (tap and swipe to draw)
-        let isDrawing = false;
+        document.addEventListener('mousemove', (e) => {
+            if (isDrawing) {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
 
+                ctx.lineTo(e.clientX, e.clientY);
+                ctx.strokeStyle = 'black'; // Brush color is always black
+                ctx.lineWidth = 8; // Brush size
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDrawing = false;
+        });
+
+        // Mobile Drawing System (tap and swipe to draw)
         canvas.addEventListener('touchstart', (e) => {
             isDrawing = true;
             const touch = e.touches[0]; // Get the first touch
