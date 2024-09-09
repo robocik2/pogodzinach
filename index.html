@@ -15,6 +15,7 @@
             overflow: hidden;
             cursor: none;
             user-select: none; /* Disable text selection */
+            background-color: #f0f0f0; /* Default background color */
         }
         #logo, #cursor {
             pointer-events: none; /* Disable clicking */
@@ -39,6 +40,7 @@
             margin: 20px;
             font-size: 20px;
             cursor: pointer;
+            color: black;
         }
         #info {
             top: 0;
@@ -69,6 +71,7 @@
             return `hsl(${hue}, 100%, 87%)`;
         }
 
+        // Set a random pastel color as the background
         document.body.style.backgroundColor = getRandomPastelColor();
 
         const cursor = document.getElementById('cursor');
@@ -76,10 +79,35 @@
         const ctx = canvas.getContext('2d');
 
         // Set canvas dimensions to match the window size
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
 
-        // Mousemove event to update custom cursor position and draw on canvas
+        resizeCanvas(); // Initial setup
+
+        // Continuous drawing on mouse move
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e
+            cursor.style.top = e.clientY + 'px';
+
+            ctx.lineTo(e.clientX, e.clientY);
+            ctx.strokeStyle = 'black'; // Brush color is always black
+            ctx.lineWidth = 8; // Brush size
+            ctx.lineCap = 'round';
+            ctx.stroke();
+        });
+
+        // Start a new path every time mouse is moved
+        document.addEventListener('mousemove', (e) => {
+            ctx.beginPath(); // Start a new path
+            ctx.moveTo(e.clientX, e.clientY);
+        });
+
+        // Resize canvas on window resize
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+        });
+    </script>
+</body>
+</html>
