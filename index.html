@@ -38,7 +38,8 @@
         .button {
             position: fixed;
             margin: 20px;
-            font-size: 28px; /* Increased font size */
+            font-size: 32px; /* Bigger font size */
+            font-weight: bold; /* Bold text */
             cursor: pointer;
             color: black;
         }
@@ -88,7 +89,7 @@
 
         resizeCanvas(); // Initial setup
 
-        // Continuous drawing on mouse move
+        // Mouse drawing event
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
@@ -105,6 +106,32 @@
             ctx.beginPath(); // Start a new path
             ctx.moveTo(e.clientX, e.clientY);
         });
+
+        // Touch events for mobile drawing
+        canvas.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0]; // Get the first touch
+            const touchX = touch.clientX;
+            const touchY = touch.clientY;
+
+            ctx.lineTo(touchX, touchY);
+            ctx.strokeStyle = 'black'; // Brush color
+            ctx.lineWidth = 8; // Brush size
+            ctx.lineCap = 'round';
+            ctx.stroke();
+
+            e.preventDefault(); // Prevent scrolling
+        });
+
+        canvas.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            ctx.beginPath();
+            ctx.moveTo(touch.clientX, touch.clientY);
+        });
+
+        // Prevent touch scrolling during drawing
+        document.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        }, { passive: false });
 
         // Resize canvas on window resize
         window.addEventListener('resize', () => {
