@@ -14,6 +14,7 @@
             align-items: center;
             overflow: hidden;
             cursor: none;
+            user-select: none; /* Disable text selection */
         }
         #logo {
             max-width: 80%;
@@ -38,6 +39,7 @@
     <canvas id="drawCanvas"></canvas>
 
     <script>
+        // Function to generate a pastel color (no longer used for stroke, but for background)
         function getRandomPastelColor() {
             const hue = Math.floor(Math.random() * 360);
             return `hsl(${hue}, 100%, 87%)`;
@@ -49,11 +51,13 @@
         const canvas = document.getElementById('drawCanvas');
         const ctx = canvas.getContext('2d');
 
+        // Set canvas dimensions to match the window size
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
         let isDrawing = false;
 
+        // Mousemove event to update custom cursor position
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
@@ -64,19 +68,22 @@
             }
         });
 
+        // Mousedown event to start drawing
         document.addEventListener('mousedown', (e) => {
             isDrawing = true;
             ctx.beginPath();
             ctx.moveTo(e.clientX, e.clientY);
-            ctx.strokeStyle = getRandomPastelColor();
-            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'black'; // Brush color is always black
+            ctx.lineWidth = 8; // Increased brush size
             ctx.lineCap = 'round';
         });
 
+        // Mouseup event to stop drawing
         document.addEventListener('mouseup', () => {
             isDrawing = false;
         });
 
+        // Resize event to adjust canvas size when the window is resized
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
