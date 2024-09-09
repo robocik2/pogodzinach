@@ -16,6 +16,9 @@
             cursor: none;
             user-select: none; /* Disable text selection */
         }
+        #logo, #cursor {
+            pointer-events: none; /* Disable clicking */
+        }
         #logo {
             max-width: 80%;
             max-height: 80%;
@@ -31,6 +34,23 @@
             left: 0;
             z-index: -1;
         }
+        .button {
+            position: fixed;
+            margin: 20px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        #info {
+            top: 0;
+            left: 0;
+        }
+        #insta {
+            top: 0;
+            right: 0;
+        }
+        .button:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -38,8 +58,12 @@
     <img id="cursor" src="cursorhover.png" alt="Custom Cursor">
     <canvas id="drawCanvas"></canvas>
 
+    <!-- Buttons -->
+    <div id="info" class="button">INFO</div>
+    <div id="insta" class="button" onclick="window.location.href='https://www.instagram.com/po_godzinach_zin/'">INSTA</div>
+
     <script>
-        // Function to generate a pastel color (no longer used for stroke, but for background)
+        // Function to generate a pastel color (for background)
         function getRandomPastelColor() {
             const hue = Math.floor(Math.random() * 360);
             return `hsl(${hue}, 100%, 87%)`;
@@ -55,39 +79,7 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        let isDrawing = false;
-
-        // Mousemove event to update custom cursor position
+        // Mousemove event to update custom cursor position and draw on canvas
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-
-            if (isDrawing) {
-                ctx.lineTo(e.clientX, e.clientY);
-                ctx.stroke();
-            }
-        });
-
-        // Mousedown event to start drawing
-        document.addEventListener('mousedown', (e) => {
-            isDrawing = true;
-            ctx.beginPath();
-            ctx.moveTo(e.clientX, e.clientY);
-            ctx.strokeStyle = 'black'; // Brush color is always black
-            ctx.lineWidth = 8; // Increased brush size
-            ctx.lineCap = 'round';
-        });
-
-        // Mouseup event to stop drawing
-        document.addEventListener('mouseup', () => {
-            isDrawing = false;
-        });
-
-        // Resize event to adjust canvas size when the window is resized
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-    </script>
-</body>
-</html>
+            cursor.style.top = e
